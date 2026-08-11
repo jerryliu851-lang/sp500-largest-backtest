@@ -20,6 +20,7 @@
     --brown: #7a5a3a;
     --purple: #6a4a9a;
     --magenta: #9a4a72;
+    --gold: #9a7d1f;
     --index-tint: rgba(58, 110, 165, 0.08);
     --mono: ui-monospace, "SF Mono", "Menlo", "Consolas", monospace;
     --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
@@ -40,6 +41,7 @@
       --brown: #c99b6e;
       --purple: #b39ce0;
       --magenta: #e0a0c2;
+      --gold: #e0c05c;
       --index-tint: rgba(127, 168, 214, 0.12);
     }
   }
@@ -75,6 +77,8 @@
   .disclaimer-block p:last-child { margin-bottom: 0; }
   .disclaimer-block strong { color: var(--fg); font-weight: 600; }
   .disclaimer-block .nfa { font-weight: 600; color: var(--fg); }
+  .disclaimer-strip { font-size: 0.88rem; color: var(--fg); margin: 0 0 0.75rem; }
+  .disclaimer-strip .nfa { font-weight: 600; }
 
   section { margin-top: 2.5rem; }
 
@@ -137,37 +141,6 @@
   .bias-controls li { font-size: 0.88rem; margin-bottom: 0.5rem; color: var(--fg); }
   .bias-controls li:last-child { margin-bottom: 0; }
 
-  .group-label {
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--muted);
-    font-weight: 700;
-    margin: 1.5rem 0 0.6rem;
-  }
-  .group-label:first-child { margin-top: 0; }
-
-  .cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1rem;
-  }
-  .card {
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 1.1rem 1.2rem;
-    background: var(--card-bg);
-    border-top: 3px solid var(--card-accent, var(--border));
-  }
-  .card h3 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted); font-weight: 600; margin-bottom: 0.15rem;}
-  .card .ticker-name { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.75rem; color: var(--fg); }
-  .card dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 0.3rem 0.6rem; }
-  .card dt { font-size: 0.78rem; color: var(--muted); align-self: center; }
-  .card dd { margin: 0; font-family: var(--mono); font-size: 0.92rem; text-align: right; font-weight: 400; }
-  .card dd.pos { color: var(--green); }
-  .card dd.tax { color: var(--red); }
-  .card .divider { grid-column: 1 / -1; border-top: 1px solid var(--border); margin: 0.35rem 0; }
-
   .finding {
     border: 1px solid var(--border);
     border-left: 3px solid var(--amber);
@@ -224,6 +197,32 @@
   tr.hl-row td { font-weight: 600; background: var(--index-tint); }
   .tag-approx { font-size: 0.68rem; color: var(--muted); border: 1px solid var(--border); border-radius: 3px; padding: 0.05rem 0.35rem; margin-left: 0.4rem; }
 
+  /* Comparison table — the centerpiece */
+  .table-wrap.cmp-wrap table { min-width: 720px; }
+  .cmp-table td.num, .cmp-table th.num { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+  .cmp-table thead th[data-key] { cursor: pointer; user-select: none; white-space: nowrap; }
+  .cmp-table thead th[data-key]:hover { color: var(--fg); }
+  .cmp-table thead th.sorted { color: var(--fg); }
+  .cmp-table .sort-caret { display: inline-block; margin-left: 0.3rem; font-size: 0.6rem; opacity: 0.55; }
+  .cmp-table thead th.sorted .sort-caret { opacity: 1; }
+  .cmp-table td:first-child { vertical-align: middle; font-weight: 600; white-space: nowrap; }
+  .kind-dot { display: inline-block; width: 0.55rem; height: 0.55rem; border-radius: 50%; margin-right: 0.5rem; vertical-align: middle; }
+  tr.tbl-benchmark td { background: var(--index-tint); }
+
+  /* Collapsible detail sections */
+  details.xdetails { margin-top: 1.25rem; border: 1px solid var(--border); border-radius: 6px; background: var(--card-bg); }
+  details.xdetails summary {
+    cursor: pointer;
+    padding: 0.75rem 1.1rem;
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--fg);
+  }
+  details.xdetails .xdetails-body { padding: 0.2rem 1.1rem 1.1rem; border-top: 1px solid var(--border); padding-top: 0.9rem; }
+  details.xdetails .xdetails-body > *:first-child { margin-top: 0; }
+
   details.brief-flips { margin-top: 1.25rem; border: 1px solid var(--border); border-radius: 6px; padding: 0.2rem 0; background: var(--card-bg); }
   details.brief-flips summary { cursor: pointer; padding: 0.65rem 1rem; font-weight: 600; font-size: 0.88rem; }
   details.brief-flips .table-wrap { margin: 0 1rem 1rem; border-top: 1px solid var(--border); border-radius: 0 0 6px 6px; }
@@ -235,6 +234,8 @@
   .vcheck-fail { color: var(--red); font-weight: 600; }
   footer.verify .table-wrap { margin-top: 0.5rem; }
   footer.verify .verify-summary { margin-top: 0.6rem; font-size: 0.85rem; color: var(--muted); }
+  .verify-line { font-size: 0.9rem; font-weight: 600; }
+  .verify-line.vcheck-pass, .verify-line.vcheck-fail { font-weight: 600; }
 
   .credit { color: var(--muted); font-size: 0.78rem; margin-top: 2.5rem; }
 </style>
@@ -244,16 +245,20 @@
 
   <header>
     <h1>Buy the Index vs. Buy the Biggest Company</h1>
-    <p class="sub">A 2020–2026 backtest of eight strategies: the S&amp;P 500 (SPY, and its index-fund twin VFIAX), an actively managed fund chosen by a hindsight-free rule (AGTHX), holding the 2020 market-cap leader statically (B1) or rebalancing into whichever company is currently #1 (B2), a market-cap control (Microsoft), and an equal-weight "Magnificent 7" held static or rebalanced annually — each compared pre-tax, post-tax, and after fees.</p>
+    <p class="sub">A 2020–2026 backtest of nine strategies — the S&amp;P 500 and its index-fund twin, an active fund chosen by a hindsight-free rule, buying the 2020 market-cap leader (static or chased), a market-cap control, and an equal-weight Top 5 / Magnificent 7 held static or rebalanced. Compared pre-tax, post-tax, and after fees.</p>
 
     <div class="disclaimer-block">
-      <p><strong>Data:</strong> Yahoo Finance daily closes. Returns are TOTAL RETURN (dividends reinvested, split-adjusted). A price-return toggle is provided.</p>
-      <p><strong>Funds:</strong> Fund values are NAV <strong>net of expense ratio</strong> — the fee is already embedded in the price series. Each fund card's "fees paid" makes that embedded cost explicit: <span class="mono">final × ((1+ER)^years − 1)</span>. Mutual funds' annual capital-gains <em>distribution</em> taxes are NOT modeled (a simplification that would make active funds look slightly worse than shown here). Dividend tax is not separately modeled for any strategy.</p>
-      <p>Markets were closed 2026-08-08/09 (weekend); the final valuation uses the last close, Fri 2026-08-07.</p>
-      <p><strong>Tax assumptions:</strong> Assumes a single federal filer. Long-term (&gt;1yr) 15%, short-term 24% (adjustable). State taxes ignored. Capital-loss offsetting across strategies/segments is not modeled. Mag 7 annual-rebalance gains are treated long-term (~368-day holds between rebalances); the terminal sale is treated long-term on an average-cost basis — a stated simplification.</p>
-      <p><strong>Not predictive:</strong> This is one realized path over ~6.6 years — a single sample, not a forecast.</p>
-      <p><strong>No fabrication:</strong> every fund ticker, expense ratio, and constituent on this page is verified against a cited source (see below).</p>
-      <p class="nfa">Not financial advice.</p>
+      <p class="disclaimer-strip"><strong>Total return, net of fees.</strong> Not predictive — one realized path, not a forecast. <span class="nfa">Not financial advice.</span></p>
+      <details class="xdetails" style="margin-top:0;">
+        <summary>ASSUMPTIONS &amp; METHODOLOGY</summary>
+        <div class="xdetails-body">
+          <p><strong>Data:</strong> Yahoo Finance daily closes. Returns are TOTAL RETURN (dividends reinvested, split-adjusted). A price-return toggle is provided.</p>
+          <p><strong>Funds:</strong> Fund values are NAV <strong>net of expense ratio</strong> — the fee is already embedded in the price series. Each fund row's "fees paid" makes that embedded cost explicit: <span class="mono">final × ((1+ER)^years − 1)</span>. Mutual funds' annual capital-gains <em>distribution</em> taxes are NOT modeled (a simplification that would make active funds look slightly worse than shown here). Dividend tax is not separately modeled for any strategy.</p>
+          <p>Markets were closed 2026-08-08/09 (weekend); the final valuation uses the last close, Fri 2026-08-07.</p>
+          <p><strong>Tax assumptions:</strong> Assumes a single federal filer. Long-term (&gt;1yr) 15%, short-term 24% (adjustable). State taxes ignored. Capital-loss offsetting across strategies/segments is not modeled. Mag 7 annual-rebalance gains are treated long-term (~368-day holds between rebalances); the terminal sale is treated long-term on an average-cost basis — a stated simplification.</p>
+          <p><strong>No fabrication:</strong> every fund ticker, expense ratio, and constituent on this page is verified against a cited source (see below).</p>
+        </div>
+      </details>
     </div>
   </header>
 
@@ -286,14 +291,6 @@
       </div>
       <span class="hint">&nbsp;</span>
     </div>
-    <div class="field">
-      <label>Chart y-axis</label>
-      <div class="seg">
-        <button type="button" class="seg-btn active" data-scale="linear">Linear</button>
-        <button type="button" class="seg-btn" data-scale="log">Log</button>
-      </div>
-      <span class="hint">&nbsp;</span>
-    </div>
   </section>
 
   <section class="selection-bias" id="selectionBias">
@@ -306,13 +303,26 @@
     </ul>
   </section>
 
-  <section class="cards-section">
-    <div class="group-label">Index — SPY · VFIAX · AGTHX</div>
-    <div class="cards" id="cardsIndex"></div>
-    <div class="group-label">Single-stock — B1 static · B2 rebalance · MSFT control</div>
-    <div class="cards" id="cardsSingleStock"></div>
-    <div class="group-label">Magnificent 7 — equal-weight</div>
-    <div class="cards" id="cardsMag7"></div>
+  <section class="cmp-section">
+    <h2 class="section-eyebrow">Strategy comparison</h2>
+    <p class="sub" style="max-width:none;">Sorted by total return by default — click any column header to re-sort.</p>
+    <div class="table-wrap cmp-wrap">
+      <table id="cmpTable" class="cmp-table">
+        <thead>
+          <tr>
+            <th data-key="label">Strategy</th>
+            <th data-key="pre" class="num">Final (pre-tax)</th>
+            <th data-key="post" class="num">Post-tax</th>
+            <th data-key="ret" class="num">Return</th>
+            <th data-key="cagr" class="num">CAGR</th>
+            <th data-key="dd" class="num">Max DD</th>
+            <th data-key="tax" class="num">Tax</th>
+            <th data-key="fees" class="num">Fees</th>
+          </tr>
+        </thead>
+        <tbody id="cmpTableBody"></tbody>
+      </table>
+    </div>
   </section>
 
   <section class="finding">
@@ -334,33 +344,8 @@
 
   <section class="charts">
     <h2 class="section-eyebrow">Portfolio value over time</h2>
-    <p class="scale-note">All charts share one $ scale so heights are directly comparable — which is why the funds look flat next to Mag 7.</p>
-    <div class="charts-grid" id="chartsGrid">
-      <div class="chart-block">
-        <h3>A — S&amp;P 500 (SPY)</h3>
-        <div class="chart-wrap"><canvas id="chartSPY"></canvas></div>
-      </div>
-      <div class="chart-block">
-        <h3>VFIAX — S&amp;P 500 index fund</h3>
-        <div class="chart-wrap"><canvas id="chartVFIAX"></canvas></div>
-      </div>
-      <div class="chart-block">
-        <h3>AGTHX — active fund</h3>
-        <div class="chart-wrap"><canvas id="chartAGTHX"></canvas></div>
-      </div>
-      <div class="chart-block">
-        <h3>MSFT — market-cap control</h3>
-        <div class="chart-wrap"><canvas id="chartMSFT"></canvas></div>
-      </div>
-      <div class="chart-block">
-        <h3>Single stock — B1 static vs. B2 rebalance</h3>
-        <div class="chart-wrap"><canvas id="chartB1B2"></canvas></div>
-      </div>
-      <div class="chart-block">
-        <h3>Magnificent 7 — static vs. annual rebalance</h3>
-        <div class="chart-wrap"><canvas id="chartMag7"></canvas></div>
-      </div>
-    </div>
+    <p class="scale-note">Each chart is scaled to its own range — read the table for magnitudes, the charts for shape and volatility.</p>
+    <div class="charts-grid" id="chartsGrid"></div>
   </section>
 
   <section class="drawdown">
@@ -373,66 +358,89 @@
     <div class="callout amber">
       <p><strong>Survivorship callout.</strong> Had the 2020 "largest company" instead been a volatile winner like Nvidia, a static hold would have returned +3,655% — but survived a -66% drawdown in 2022. Apple's max drawdown (-33.4%) landed close to the market's (-33.7%) largely by chance; the MSFT control saw a deeper -37.1%. Deeper single-stock risk is real — it simply didn't dominate the picks modeled here.</p>
     </div>
-    <div class="table-wrap">
-      <table id="refTable">
-        <thead><tr><th>Ticker</th><th>Total return</th><th>Max drawdown</th></tr></thead>
-        <tbody id="refTableBody"></tbody>
-      </table>
-    </div>
-    <p style="font-size:0.78rem;color:var(--muted);margin-top:0.5rem;">Reference figures computed live from the same dataset, full period 2020-01-02 → 2026-08-07, total return basis.</p>
+    <details class="xdetails">
+      <summary>SINGLE-STOCK DRAWDOWN REFERENCE TABLE</summary>
+      <div class="xdetails-body">
+        <div class="table-wrap">
+          <table id="refTable">
+            <thead><tr><th>Ticker</th><th>Total return</th><th>Max drawdown</th></tr></thead>
+            <tbody id="refTableBody"></tbody>
+          </table>
+        </div>
+        <p style="font-size:0.78rem;color:var(--muted);margin-top:0.5rem;margin-bottom:0;">Reference figures computed live from the same dataset, full period 2020-01-02 → 2026-08-07, total return basis.</p>
+      </div>
+    </details>
   </section>
 
   <section class="mag7detail">
-    <h2 class="section-eyebrow">Magnificent 7 — per-stock detail</h2>
-    <p>The equal-weight bet became a de-facto NVDA bet through drift alone.</p>
-    <div class="table-wrap">
-      <table id="mag7Table">
-        <thead><tr><th>Ticker</th><th>Start weight</th><th>Final value</th><th>$ Gain</th><th>Final weight</th></tr></thead>
-        <tbody id="mag7TableBody"></tbody>
-      </table>
-    </div>
-    <p class="modeling-note" id="mag7WeightNote"></p>
-    <h3 style="margin-top:1.5rem;font-size:0.9rem;">Annual-rebalance tax log</h3>
-    <p class="sub" style="max-width:none;">Static equal-weight is rebalanced to exactly 1/7 on the first trading day of each year. Overweight positions are sold (gain realized vs. average cost basis, taxed long-term), and the post-tax cash buys underweight positions pro-rata to their shortfall. The terminal sale at the end of the period dominates the total tax bill.</p>
-    <div class="table-wrap">
-      <table id="mag7TaxTable">
-        <thead><tr><th>Date</th><th>Tax realized</th></tr></thead>
-        <tbody id="mag7TaxTableBody"></tbody>
-      </table>
-    </div>
+    <details class="xdetails">
+      <summary>MAG 7 PER-STOCK DETAIL</summary>
+      <div class="xdetails-body">
+        <p>The equal-weight bet became a de-facto NVDA bet through drift alone.</p>
+        <div class="table-wrap">
+          <table id="mag7Table">
+            <thead><tr><th>Ticker</th><th>Start weight</th><th>Final value</th><th>$ Gain</th><th>Final weight</th></tr></thead>
+            <tbody id="mag7TableBody"></tbody>
+          </table>
+        </div>
+        <p class="modeling-note" id="mag7WeightNote"></p>
+      </div>
+    </details>
+    <details class="xdetails">
+      <summary>REBALANCE TAX LOG</summary>
+      <div class="xdetails-body">
+        <p class="sub" style="max-width:none;">Static equal-weight is rebalanced to exactly 1/7 on the first trading day of each year. Overweight positions are sold (gain realized vs. average cost basis, taxed long-term), and the post-tax cash buys underweight positions pro-rata to their shortfall. The terminal sale at the end of the period dominates the total tax bill.</p>
+        <div class="table-wrap">
+          <table id="mag7TaxTable">
+            <thead><tr><th>Date</th><th>Tax realized</th></tr></thead>
+            <tbody id="mag7TaxTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </details>
   </section>
 
   <section class="sequence">
-    <h2 class="section-eyebrow">Leadership sequence (traded by B2)</h2>
-    <p class="sub" style="max-width:none;">Each row is a date the company BECAME #1 by market cap (close-of-day, sustained). B2 sells the prior holding and buys the new one on the next trading day if the transition date itself isn't one.</p>
-    <div class="table-wrap">
-      <table id="seqTable">
-        <thead><tr><th>Date</th><th>Ticker</th><th>Event</th><th>Source</th></tr></thead>
-        <tbody id="seqTableBody"></tbody>
-      </table>
-    </div>
-    <details class="brief-flips">
-      <summary id="flipsSummary">Brief flips NOT traded in this model</summary>
-      <div class="table-wrap">
-        <table id="flipTable">
-          <thead><tr><th>Date</th><th>Ticker</th><th>Event</th><th>Source</th></tr></thead>
-          <tbody id="flipTableBody"></tbody>
-        </table>
+    <details class="xdetails">
+      <summary>LEADERSHIP-SEQUENCE TIMELINE</summary>
+      <div class="xdetails-body">
+        <p class="sub" style="max-width:none;">Each row is a date the company BECAME #1 by market cap (close-of-day, sustained). B2 sells the prior holding and buys the new one on the next trading day if the transition date itself isn't one.</p>
+        <div class="table-wrap">
+          <table id="seqTable">
+            <thead><tr><th>Date</th><th>Ticker</th><th>Event</th><th>Source</th></tr></thead>
+            <tbody id="seqTableBody"></tbody>
+          </table>
+        </div>
+        <details class="brief-flips">
+          <summary id="flipsSummary">Brief flips NOT traded in this model</summary>
+          <div class="table-wrap">
+            <table id="flipTable">
+              <thead><tr><th>Date</th><th>Ticker</th><th>Event</th><th>Source</th></tr></thead>
+              <tbody id="flipTableBody"></tbody>
+            </table>
+          </div>
+        </details>
+        <p class="modeling-note">B2 trades only sustained close-of-day leadership changes. Several brief intraday/few-day flips (Jun 2024, Nov 2024, Jan 2025, Apr 2025) reverted quickly and are not traded. A stricter daily-switch rule would add short-term taxable churn, making B2's tax drag WORSE — so this model is conservative in B2's favor.</p>
       </div>
     </details>
-    <p class="modeling-note">B2 trades only sustained close-of-day leadership changes. Several brief intraday/few-day flips (Jun 2024, Nov 2024, Jan 2025, Apr 2025) reverted quickly and are not traded. A stricter daily-switch rule would add short-term taxable churn, making B2's tax drag WORSE — so this model is conservative in B2's favor.</p>
   </section>
 
   <footer class="verify" id="verifyFooter">
     <h2>Model verification</h2>
-    <p style="font-size:0.85rem;color:var(--muted);">JS engine output at DEFAULT inputs (startCapital=$100,000, start=2020-01-02, LT=15%, ST=24%, basis=total return) checked against an independent Python oracle (oracle2.py) for all 8 strategies. Tolerance: $100.</p>
-    <div class="table-wrap">
-      <table id="verifyTable">
-        <thead><tr><th>Strategy</th><th>Metric</th><th>JS computed</th><th>Oracle target</th><th>Diff</th><th>Status</th></tr></thead>
-        <tbody id="verifyTableBody"></tbody>
-      </table>
-    </div>
-    <p class="verify-summary" id="verifySummary"></p>
+    <p class="verify-line" id="verifySummary">✓ All figures verified against an independent Python model.</p>
+    <details class="xdetails">
+      <summary>SHOW VERIFICATION TABLE</summary>
+      <div class="xdetails-body">
+        <p style="font-size:0.85rem;color:var(--muted);">JS engine output at DEFAULT inputs (startCapital=$100,000, start=2020-01-02, LT=15%, ST=24%, basis=total return) checked against an independent Python oracle (oracle2.py) for all 9 strategies. Tolerance: $100.</p>
+        <div class="table-wrap">
+          <table id="verifyTable">
+            <thead><tr><th>Strategy</th><th>Metric</th><th>JS computed</th><th>Oracle target</th><th>Diff</th><th>Status</th></tr></thead>
+            <tbody id="verifyTableBody"></tbody>
+          </table>
+        </div>
+        <p class="verify-summary" id="verifyDetail"></p>
+      </div>
+    </details>
     <p class="credit">Self-contained HTML artifact. Chart.js loaded from CDN; all price, sequence, and tax-log data is embedded inline — no other network calls.</p>
   </footer>
 
@@ -444,9 +452,10 @@ const DATA = {"meta":{"source":"Yahoo Finance chart API v8","period1_unix":15778
 
 /* ============================================================
    ENGINE — mirrors oracle.py (A/B1/B2) and oracle2.py (VFIAX,
-   AGTHX, MSFT control, Mag7 static, Mag7 annual-rebalance) exactly.
-   Verified via a Node.js port against artifact_data.json — all
-   8-strategy pre/post/tax/fees checks passed within cents.
+   AGTHX, MSFT control, Mag7 static, Mag7 annual-rebalance,
+   Top 5 (2020) static) exactly. Verified via a Node.js port
+   against artifact_data.json — all 9-strategy pre/post/tax/fees
+   checks passed within cents.
    ============================================================ */
 
 const DATES = DATA.dates;
@@ -471,6 +480,7 @@ const PLOOK = { adj: buildLook('adj'), close: buildLook('close') };
 
 const ER = { SPY: 0.000945, VFIAX: 0.0004, AGTHX: 0.0059, FCNTX: 0.0074 };
 const M7 = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'NVDA', 'META', 'TSLA'];
+const TOP5 = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'META'];
 
 function firstIdxOnOrAfter(dateStr) {
   for (let i = 0; i < N; i++) { if (DATES[i] >= dateStr) return i; }
@@ -586,17 +596,19 @@ function computeB2(basisKey, startDateRaw, s0idx, startCapital, ltRate, stRate, 
   return { pre: preB2, post: postB2, tax: taxPaid, fees: 0, ret: preB2 / startCapital - 1, cagr, dd: ddB2, path: gross, segs, switchLog };
 }
 
-/* ---- Mag 7 static (equal $, no rebalance) ---- */
-function computeMag7Static(basisKey, s0idx, startCapital, ltRate, stRate) {
+/* ---- Equal-weight static (equal $, no rebalance) — used by both
+   Mag 7 static and Top 5 (2020) static ---- */
+function computeEqualWeightStatic(basisKey, s0idx, startCapital, ltRate, stRate, tickers) {
   const plook = PLOOK[basisKey];
   const s0date = DATES[s0idx];
+  const n = tickers.length;
   const sh = {};
-  for (const t of M7) sh[t] = (startCapital / 7) / plook[t][s0date];
+  for (const t of tickers) sh[t] = (startCapital / n) / plook[t][s0date];
   const path = [];
   for (let i = s0idx; i < N; i++) {
     const d = DATES[i];
     let v = 0;
-    for (const t of M7) v += sh[t] * plook[t][d];
+    for (const t of tickers) v += sh[t] * plook[t][d];
     path.push(v);
   }
   const pre = path[path.length - 1];
@@ -606,14 +618,20 @@ function computeMag7Static(basisKey, s0idx, startCapital, ltRate, stRate) {
   const tax = rate * Math.max(0, gain);
   const post = pre - tax;
   const contrib = {}, weight = {}, gainByStock = {};
-  for (const t of M7) {
+  for (const t of tickers) {
     contrib[t] = sh[t] * plook[t][LAST_DATE];
     weight[t] = contrib[t] / pre;
-    gainByStock[t] = contrib[t] - startCapital / 7;
+    gainByStock[t] = contrib[t] - startCapital / n;
   }
   const cagr = Math.pow(pre / startCapital, 365.25 / heldDays) - 1;
   const dd = maxDrawdown(path);
   return { pre, post, tax, fees: 0, ret: pre / startCapital - 1, cagr, dd, path, contrib, weight, gain: gainByStock, heldDays };
+}
+function computeMag7Static(basisKey, s0idx, startCapital, ltRate, stRate) {
+  return computeEqualWeightStatic(basisKey, s0idx, startCapital, ltRate, stRate, M7);
+}
+function computeTop5Static(basisKey, s0idx, startCapital, ltRate, stRate) {
+  return computeEqualWeightStatic(basisKey, s0idx, startCapital, ltRate, stRate, TOP5);
 }
 
 /* ---- Mag 7 annual rebalance (partial rebalance, avg-cost basis) ---- */
@@ -723,8 +741,9 @@ function computeAll(inputs) {
   const MSFTc = buyHold('MSFT', basisKey, s0idx, startCapital, ltRate, stRate, 0);
   const M7S = computeMag7Static(basisKey, s0idx, startCapital, ltRate, stRate);
   const M7R = computeMag7Rebalance(basisKey, s0idx, startCapital, ltRate);
+  const TOP5S = computeTop5Static(basisKey, s0idx, startCapital, ltRate, stRate);
 
-  return { A, VFIAX, AGTHX, B1, B2, MSFTc, M7S, M7R, b1t, s0idx, s0date, heldDaysTerm };
+  return { A, VFIAX, AGTHX, B1, B2, MSFTc, M7S, M7R, TOP5S, b1t, s0idx, s0date, heldDaysTerm };
 }
 
 /* ============================================================
@@ -747,7 +766,8 @@ function getCssVar(name) {
 }
 
 /* ============================================================
-   CHART SETUP — small multiples, shared y-axis, linear/log toggle
+   CHART SETUP — small multiples, EACH chart on its own y scale.
+   No shared yMax, no linear/log toggle: own-scale linear only.
    ============================================================ */
 Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif";
 Chart.defaults.color = getCssVar('--muted');
@@ -755,8 +775,9 @@ Chart.defaults.borderColor = getCssVar('--border');
 
 let CURRENT_START_CAPITAL = 100000;
 const chartInstances = {};
+const ALL_CHART_IDS = ['chartMag7', 'chartB1B2', 'chartTop5', 'chartMSFT', 'chartSPY', 'chartVFIAX', 'chartAGTHX'];
 
-function buildChart(canvasId, datasets, labels, yMax, scaleType) {
+function buildChart(canvasId, datasets, labels) {
   const ctx = document.getElementById(canvasId).getContext('2d');
   return new Chart(ctx, {
     type: 'line',
@@ -777,9 +798,8 @@ function buildChart(canvasId, datasets, labels, yMax, scaleType) {
           border: { color: getCssVar('--border') }
         },
         y: {
-          type: scaleType,
-          min: scaleType === 'linear' ? 0 : undefined,
-          max: yMax,
+          // Own-scale: no fixed max — Chart.js auto-fits to this chart's data.
+          beginAtZero: true,
           ticks: {
             color: getCssVar('--muted'),
             maxTicksLimit: 6,
@@ -815,92 +835,172 @@ function buildChart(canvasId, datasets, labels, yMax, scaleType) {
   });
 }
 
+function chartSpecs(result) {
+  return [
+    {
+      id: 'chartMag7',
+      title: 'Magnificent 7 — static vs. annual rebalance',
+      lines: [
+        { label: 'Mag 7 — static', data: result.M7S.path, color: getCssVar('--purple') },
+        { label: 'Mag 7 — rebalance', data: result.M7R.path, color: getCssVar('--magenta') }
+      ],
+      sortValue: Math.max(result.M7S.pre, result.M7R.pre)
+    },
+    {
+      id: 'chartB1B2',
+      title: 'Single stock — B1 static vs. B2 rebalance',
+      lines: [
+        { label: 'B1 — static ' + result.b1t, data: result.B1.path, color: getCssVar('--green') },
+        { label: 'B2 — rebalance', data: result.B2.path, color: getCssVar('--amber') }
+      ],
+      sortValue: Math.max(result.B1.pre, result.B2.pre)
+    },
+    {
+      id: 'chartTop5',
+      title: 'Top 5 (2020) — equal-weight',
+      lines: [{ label: 'Top 5', data: result.TOP5S.path, color: getCssVar('--gold') }],
+      sortValue: result.TOP5S.pre
+    },
+    {
+      id: 'chartMSFT',
+      title: 'MSFT — market-cap control',
+      lines: [{ label: 'MSFT control', data: result.MSFTc.path, color: getCssVar('--brown') }],
+      sortValue: result.MSFTc.pre
+    },
+    {
+      id: 'chartSPY',
+      title: 'A — S&P 500 (SPY)',
+      lines: [{ label: 'SPY', data: result.A.path, color: getCssVar('--blue') }],
+      sortValue: result.A.pre
+    },
+    {
+      id: 'chartVFIAX',
+      title: 'VFIAX — S&P 500 index fund',
+      lines: [{ label: 'VFIAX', data: result.VFIAX.path, color: getCssVar('--teal') }],
+      sortValue: result.VFIAX.pre
+    },
+    {
+      id: 'chartAGTHX',
+      title: 'AGTHX — active fund',
+      lines: [{ label: 'AGTHX', data: result.AGTHX.path, color: getCssVar('--taupe') }],
+      sortValue: result.AGTHX.pre
+    }
+  ];
+}
+
 function renderCharts(result) {
   CURRENT_START_CAPITAL = document.getElementById('inpCapital').value ? Number(document.getElementById('inpCapital').value) : result.A.path[0];
   const labels = DATES.slice(result.s0idx);
 
-  const allPaths = [result.A.path, result.VFIAX.path, result.AGTHX.path, result.MSFTc.path, result.B1.path, result.B2.path, result.M7S.path, result.M7R.path];
-  let globalMax = -Infinity;
-  for (const p of allPaths) for (const v of p) if (v > globalMax) globalMax = v;
-  const yMax = Math.ceil(globalMax * 1.04 / 1000) * 1000;
-
-  const activeScaleBtn = document.querySelector('.seg-btn[data-scale].active');
-  const rawScale = activeScaleBtn ? activeScaleBtn.dataset.scale : 'linear';
-  // Chart.js v4's scale is named 'logarithmic', not 'log' (the button's data value).
-  const scaleType = rawScale === 'log' ? 'logarithmic' : 'linear';
-
-  const specs = [
-    ['chartSPY', [
-      { label: 'SPY', data: result.A.path, borderColor: getCssVar('--blue') }
-    ]],
-    ['chartVFIAX', [
-      { label: 'VFIAX', data: result.VFIAX.path, borderColor: getCssVar('--teal') }
-    ]],
-    ['chartAGTHX', [
-      { label: 'AGTHX', data: result.AGTHX.path, borderColor: getCssVar('--taupe') }
-    ]],
-    ['chartMSFT', [
-      { label: 'MSFT control', data: result.MSFTc.path, borderColor: getCssVar('--brown') }
-    ]],
-    ['chartB1B2', [
-      { label: 'B1 — static ' + result.b1t, data: result.B1.path, borderColor: getCssVar('--green') },
-      { label: 'B2 — rebalance', data: result.B2.path, borderColor: getCssVar('--amber') }
-    ]],
-    ['chartMag7', [
-      { label: 'Mag 7 — static', data: result.M7S.path, borderColor: getCssVar('--purple') },
-      { label: 'Mag 7 — rebalance', data: result.M7R.path, borderColor: getCssVar('--magenta') }
-    ]]
-  ];
-
-  for (const [id, datasets] of specs) {
-    datasets.forEach(ds => { ds.backgroundColor = ds.borderColor + '22'; ds.fill = false; });
-    // Destroy whatever chart is actually on this canvas (handles untracked/orphan
-    // instances from rapid re-renders), not just the one we happen to track.
+  // Destroy whatever chart is actually bound to each canvas id (handles
+  // untracked/orphan instances from rapid re-renders), before rebuilding
+  // the grid markup in the new sorted order.
+  for (const id of ALL_CHART_IDS) {
     const existing = Chart.getChart(id) || chartInstances[id];
     if (existing) existing.destroy();
-    chartInstances[id] = buildChart(id, datasets, labels, yMax, scaleType);
+    delete chartInstances[id];
+  }
+
+  const specs = chartSpecs(result).sort((a, b) => b.sortValue - a.sortValue);
+
+  const grid = document.getElementById('chartsGrid');
+  grid.innerHTML = specs.map(spec => (
+    '<div class="chart-block">' +
+      '<h3>' + spec.title + '</h3>' +
+      '<div class="chart-wrap"><canvas id="' + spec.id + '"></canvas></div>' +
+    '</div>'
+  )).join('');
+
+  for (const spec of specs) {
+    const datasets = spec.lines.map(l => ({
+      label: l.label, data: l.data, borderColor: l.color, backgroundColor: l.color + '22', fill: false
+    }));
+    chartInstances[spec.id] = buildChart(spec.id, datasets, labels);
   }
 }
 
 /* ============================================================
-   RENDER — cards (grouped: index / single-stock / mag7)
+   RENDER — sorted comparison table (replaces the old 8 cards)
    ============================================================ */
-function cardHTML(title, tickerLabel, accentVar, d, extra) {
-  return (
-    '<div class="card" style="--card-accent:' + accentVar + '">' +
-      '<h3>' + title + '</h3>' +
-      '<div class="ticker-name">' + tickerLabel + '</div>' +
-      '<dl>' +
-        '<dt>Final value (pre-tax)</dt><dd class="mono">' + fmtUSD(d.pre) + '</dd>' +
-        '<dt>Final value (post-tax)</dt><dd class="mono">' + fmtUSD(d.post) + '</dd>' +
-        '<div class="divider"></div>' +
-        '<dt>Total return</dt><dd class="mono pos">' + fmtPct(d.ret) + '</dd>' +
-        '<dt>CAGR</dt><dd class="mono pos">' + fmtPct(d.cagr) + '</dd>' +
-        '<dt>Max drawdown</dt><dd class="mono">' + fmtPct(d.dd) + '</dd>' +
-        '<div class="divider"></div>' +
-        '<dt>Tax paid</dt><dd class="mono tax">' + fmtUSD(d.tax) + '</dd>' +
-        '<dt>Fees paid</dt><dd class="mono tax">' + fmtUSD(d.fees) + '</dd>' +
-        (extra || '') +
-      '</dl>' +
-    '</div>'
-  );
+let SORT_STATE = { key: 'ret', dir: 'desc' };
+let LAST_RESULT = null;
+
+function buildComparisonRows(result) {
+  return [
+    { label: 'Mag 7 — static', kind: 'Mag 7', color: 'var(--purple)', ...result.M7S },
+    { label: 'Mag 7 — annual rebalance', kind: 'Mag 7', color: 'var(--magenta)', ...result.M7R },
+    { label: 'Static — ' + result.b1t + ' (B1)', kind: 'Single-stock', color: 'var(--green)', ...result.B1 },
+    { label: 'Top 5 (2020) — equal weight', kind: 'Top 5', color: 'var(--gold)', ...result.TOP5S },
+    { label: 'MSFT control', kind: 'Control', color: 'var(--brown)', ...result.MSFTc },
+    { label: 'Rebalance into #1 (B2)', kind: 'Single-stock', color: 'var(--amber)', ...result.B2 },
+    { label: 'VFIAX — index fund', kind: 'Index', color: 'var(--teal)', ...result.VFIAX },
+    { label: 'S&P 500 (SPY)', kind: 'Index', color: 'var(--blue)', ...result.A, benchmark: true },
+    { label: 'AGTHX — active fund', kind: 'Index', color: 'var(--taupe)', ...result.AGTHX }
+  ];
 }
 
-function renderCards(result) {
-  document.getElementById('cardsIndex').innerHTML =
-    cardHTML('Index', 'S&amp;P 500 (SPY)', 'var(--blue)', result.A) +
-    cardHTML('Index fund', 'VFIAX', 'var(--teal)', result.VFIAX) +
-    cardHTML('Active fund', 'AGTHX', 'var(--taupe)', result.AGTHX);
+function sortRows(rows, key, dir) {
+  const mul = dir === 'asc' ? 1 : -1;
+  return rows.slice().sort((a, b) => {
+    if (key === 'label') return mul * a.label.localeCompare(b.label);
+    return mul * (a[key] - b[key]);
+  });
+}
 
-  document.getElementById('cardsSingleStock').innerHTML =
-    cardHTML('Strategy B1', 'Static — ' + result.b1t, 'var(--green)', result.B1) +
-    cardHTML('Strategy B2', 'Rebalance into #1', 'var(--amber)', result.B2,
-      '<dt>Segments traded</dt><dd class="mono">' + result.B2.segs.length + '</dd>') +
-    cardHTML('Market-cap control', 'MSFT', 'var(--brown)', result.MSFTc);
+function renderTableBody() {
+  if (!LAST_RESULT) return;
+  const rows = buildComparisonRows(LAST_RESULT);
+  const sorted = sortRows(rows, SORT_STATE.key, SORT_STATE.dir);
+  const tbody = document.getElementById('cmpTableBody');
+  tbody.innerHTML = sorted.map(r => (
+    '<tr class="' + (r.benchmark ? 'tbl-benchmark' : '') + '">' +
+      '<td><span class="kind-dot" style="background:' + r.color + '"></span>' + r.label +
+        '<span class="tag-approx">' + r.kind + '</span></td>' +
+      '<td class="num">' + fmtUSD(r.pre) + '</td>' +
+      '<td class="num">' + fmtUSD(r.post) + '</td>' +
+      '<td class="num">' + fmtPct(r.ret) + '</td>' +
+      '<td class="num">' + fmtPct(r.cagr) + '</td>' +
+      '<td class="num">' + fmtPctPlain(r.dd) + '</td>' +
+      '<td class="num">' + fmtUSD(r.tax) + '</td>' +
+      '<td class="num">' + fmtUSD(r.fees) + '</td>' +
+    '</tr>'
+  )).join('');
+  updateSortHeaderUI();
+}
 
-  document.getElementById('cardsMag7').innerHTML =
-    cardHTML('Mag 7', 'Static equal-weight', 'var(--purple)', result.M7S) +
-    cardHTML('Mag 7', 'Annual rebalance', 'var(--magenta)', result.M7R);
+function updateSortHeaderUI() {
+  document.querySelectorAll('#cmpTable thead th[data-key]').forEach(th => {
+    const key = th.dataset.key;
+    const isSorted = key === SORT_STATE.key;
+    th.classList.toggle('sorted', isSorted);
+    let caret = th.querySelector('.sort-caret');
+    if (!caret) {
+      caret = document.createElement('span');
+      caret.className = 'sort-caret';
+      th.appendChild(caret);
+    }
+    caret.textContent = isSorted ? (SORT_STATE.dir === 'asc' ? '▲' : '▼') : '';
+  });
+}
+
+function initTableSorting() {
+  document.querySelectorAll('#cmpTable thead th[data-key]').forEach(th => {
+    th.addEventListener('click', () => {
+      const key = th.dataset.key;
+      if (SORT_STATE.key === key) {
+        SORT_STATE.dir = SORT_STATE.dir === 'asc' ? 'desc' : 'asc';
+      } else {
+        SORT_STATE.key = key;
+        SORT_STATE.dir = key === 'label' ? 'asc' : 'desc';
+      }
+      renderTableBody();
+    });
+  });
+}
+
+function renderTable(result) {
+  LAST_RESULT = result;
+  renderTableBody();
 }
 
 /* ============================================================
@@ -914,6 +1014,7 @@ function renderDrawdownBars(result) {
     { label: 'B1 · ' + result.b1t, dd: result.B1.dd, color: 'var(--green)' },
     { label: 'B2 · rebal.', dd: result.B2.dd, color: 'var(--amber)' },
     { label: 'MSFT ctrl', dd: result.MSFTc.dd, color: 'var(--brown)' },
+    { label: 'Top5 · 2020', dd: result.TOP5S.dd, color: 'var(--gold)' },
     { label: 'Mag7 static', dd: result.M7S.dd, color: 'var(--purple)' },
     { label: 'Mag7 rebal.', dd: result.M7R.dd, color: 'var(--magenta)' }
   ];
@@ -1020,12 +1121,14 @@ const VERIFY_TARGETS = {
   VFIAX: { pre: 261890, post: 237606, tax: 24283, fees: 692 },
   AGTHX: { pre: 260829, post: 236705, tax: 24124, fees: 10319 },
   M7S:   { pre: 965656, post: 835808, tax: 129848, fees: 0 },
-  M7R:   { pre: 933707, post: 771517, tax: 118503, fees: 0 }
+  M7R:   { pre: 933707, post: 771517, tax: 118503, fees: 0 },
+  TOP5S: { pre: 371751, post: 330988, tax: 40763, fees: 0 }
 };
 const VERIFY_LABELS = {
   A: 'A — SPY', B1: 'B1 — static Apple', B2: 'B2 — rebalance',
   MSFTc: 'MSFT control', VFIAX: 'VFIAX', AGTHX: 'AGTHX',
-  M7S: 'Mag 7 — static', M7R: 'Mag 7 — rebalance'
+  M7S: 'Mag 7 — static', M7R: 'Mag 7 — rebalance',
+  TOP5S: 'Top 5 (2020) — equal weight'
 };
 const VERIFY_TOLERANCE = 100;
 
@@ -1066,9 +1169,21 @@ function runVerification() {
   )).join('');
 
   const nChecks = rows.length;
-  document.getElementById('verifySummary').textContent =
-    (allPass ? 'All ' + nChecks + ' checks passed (8 strategies × pre/post/tax/fees). ' : 'SOME CHECKS FAILED. ') +
-    'Tolerance $' + VERIFY_TOLERANCE + '. Basis=adj, start=2020-01-02, cap=$100,000, LT=15%, ST=24%.';
+  const nStrategies = Object.keys(VERIFY_TARGETS).length;
+
+  const summaryEl = document.getElementById('verifySummary');
+  summaryEl.textContent =
+    (allPass ? '✓ All ' + nChecks + ' figures verified against an independent Python model (' + nStrategies + ' strategies × pre/post/tax/fees, tolerance $' + VERIFY_TOLERANCE + ').'
+             : '✗ SOME CHECKS FAILED (' + nChecks + ' total) — see details below.');
+  summaryEl.classList.toggle('vcheck-pass', allPass);
+  summaryEl.classList.toggle('vcheck-fail', !allPass);
+
+  const detailEl = document.getElementById('verifyDetail');
+  if (detailEl) {
+    detailEl.textContent =
+      (allPass ? 'All ' + nChecks + ' checks passed (' + nStrategies + ' strategies × pre/post/tax/fees). ' : 'SOME CHECKS FAILED. ') +
+      'Tolerance $' + VERIFY_TOLERANCE + '. Basis=adj, start=2020-01-02, cap=$100,000, LT=15%, ST=24%.';
+  }
 
   console.log('Model verification (default inputs):');
   for (const k of Object.keys(VERIFY_TARGETS)) {
@@ -1106,7 +1221,7 @@ function recompute() {
     ? 'snapped to ' + result.s0date + ' (first trading day)'
     : 'first trading day ✓';
 
-  renderCards(result);
+  renderTable(result);
   renderCharts(result);
   renderDrawdownBars(result);
   renderMag7Table(result);
@@ -1132,6 +1247,7 @@ function initControls() {
    ============================================================ */
 document.addEventListener('DOMContentLoaded', () => {
   initControls();
+  initTableSorting();
   renderSequenceTables();
   renderRefTable();
   recompute();
