@@ -6,49 +6,35 @@
 <title>Buy the Index vs. Buy the Biggest Company vs. Funds vs. the Mag 7 — Backtest Comparison</title>
 <style>
   :root {
-    --bg: #fafaf8;
-    --fg: #1a1a18;
-    --muted: #6b6b66;
-    --border: #dedad2;
-    --card-bg: #ffffff;
-    --blue: #3a6ea5;
-    --green: #2f7a4f;
-    --amber: #a8730f;
-    --red: #a5442f;
-    --teal: #2f7a74;
-    --taupe: #8a7364;
-    --brown: #7a5a3a;
-    --purple: #6a4a9a;
-    --magenta: #9a4a72;
-    --gold: #9a7d1f;
-    --index-tint: rgba(58, 110, 165, 0.08);
+    --bg: #14161d;
+    --fg: #ececf2;
+    --muted: #a9acc0;
+    --border: rgba(255, 255, 255, 0.14);
+    --card-bg: rgba(28, 32, 44, 0.92);
+    --blue: #7fa8d6;
+    --green: #34d399;
+    --amber: #fbbf24;
+    --red: #f87171;
+    --teal: #6cbdb5;
+    --taupe: #c2ab97;
+    --brown: #c99b6e;
+    --purple: #b39ce0;
+    --magenta: #e0a0c2;
+    --gold: #e0c05c;
+    --index-tint: rgba(127, 168, 214, 0.18);
     --mono: ui-monospace, "SF Mono", "Menlo", "Consolas", monospace;
     --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #131311;
-      --fg: #e9e7e1;
-      --muted: #9b9a92;
-      --border: #33322c;
-      --card-bg: #1a1a17;
-      --blue: #7fa8d6;
-      --green: #6cbd8f;
-      --amber: #d9a441;
-      --red: #e08d78;
-      --teal: #6cbdb5;
-      --taupe: #c2ab97;
-      --brown: #c99b6e;
-      --purple: #b39ce0;
-      --magenta: #e0a0c2;
-      --gold: #e0c05c;
-      --index-tint: rgba(127, 168, 214, 0.12);
-    }
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
   body {
-    background: var(--bg);
+    background-color: #181b24;
+    background-image:
+      radial-gradient(58% 52% at 16% 12%, rgba(56, 120, 220, 0.16), transparent 60%),
+      radial-gradient(52% 48% at 86% 18%, rgba(150, 110, 240, 0.14), transparent 60%),
+      radial-gradient(60% 60% at 72% 96%, rgba(38, 178, 178, 0.10), transparent 62%),
+      linear-gradient(160deg, #16181f 0%, #1e2230 100%);
+    background-attachment: fixed;
     color: var(--fg);
     font-family: var(--sans);
     font-weight: 400;
@@ -57,40 +43,54 @@
   }
   .wrap { max-width: 1080px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
   h1, h2, h3 { font-weight: 600; margin: 0 0 0.5rem; letter-spacing: -0.01em; }
-  h1 { font-size: 1.6rem; }
+  h1 { font-size: clamp(1.7rem, 4vw, 2.4rem); }
   h2 { font-size: 1.05rem; margin-top: 0; }
   p { margin: 0 0 0.75rem; color: var(--fg); }
   a { color: var(--blue); }
   a:hover { text-decoration: none; }
   .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
-  .sub { color: var(--muted); max-width: 68ch; }
+  .sub { color: var(--muted); max-width: 68ch; font-size: 0.95rem; }
   .section-eyebrow { font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted); font-weight: 600; margin: 0 0 0.5rem; }
+  .section-eyebrow-sm { font-size: 0.8rem; }
 
-  .disclaimer-block {
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 0.9rem 1.1rem;
-    margin: 1.25rem 0 0.5rem;
-    background: var(--card-bg);
+  .disclaimer-strip { font-size: 0.82rem; color: var(--muted); margin: 0.35rem 0 0; }
+  .disclaimer-strip .nfa { font-weight: 600; color: var(--fg); }
+
+  /* ============================================================
+     REUSABLE GLASS — the chrome around every panel. Chart canvases
+     sit on the opaque .chart-surface below, never on .glass itself.
+     ============================================================ */
+  .glass {
+    background: rgba(255, 255, 255, 0.045);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-top-color: rgba(255, 255, 255, 0.20);
+    border-radius: 16px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 12px 34px -20px rgba(0, 0, 0, 0.75);
+    padding: clamp(1rem, 2.5vw, 1.6rem);
   }
-  .disclaimer-block p { font-size: 0.85rem; color: var(--muted); margin: 0 0 0.5rem; }
-  .disclaimer-block p:last-child { margin-bottom: 0; }
-  .disclaimer-block strong { color: var(--fg); font-weight: 600; }
-  .disclaimer-block .nfa { font-weight: 600; color: var(--fg); }
-  .disclaimer-strip { font-size: 0.88rem; color: var(--fg); margin: 0 0 0.75rem; }
-  .disclaimer-strip .nfa { font-weight: 600; }
+  .glass:hover {
+    background: rgba(255, 255, 255, 0.065);
+    transform: translateY(-2px);
+    transition: transform 0.18s ease, background 0.18s ease;
+  }
+  .chart-surface {
+    position: relative;
+    background: #12141a;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 0.75rem;
+    height: 260px;
+  }
 
-  section { margin-top: 2.5rem; }
+  section { margin-top: clamp(1.5rem, 4vw, 2.75rem); }
 
   .controls {
     display: flex;
     flex-wrap: wrap;
     gap: 1.25rem;
     align-items: end;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 1rem 1.1rem;
-    background: var(--card-bg);
   }
   .field { display: flex; flex-direction: column; gap: 0.3rem; }
   .field label { font-size: 0.75rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; }
@@ -119,79 +119,43 @@
   .seg-btn:last-child { border-right: none; }
   .seg-btn.active { background: var(--fg); color: var(--bg); font-weight: 600; }
 
-  /* Selection bias — elevated, prominent */
-  .selection-bias {
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--fg);
-    border-radius: 6px;
-    padding: 1.1rem 1.25rem;
-    background: var(--card-bg);
-  }
-  .selection-bias .eyebrow {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    font-weight: 700;
-    color: var(--fg);
-    margin-bottom: 0.65rem;
-  }
-  .selection-bias p { font-size: 0.97rem; margin-bottom: 0.85rem; }
-  .selection-bias p:last-of-type { margin-bottom: 0; }
+  /* ===== Hero — "Growth of $100,000", the centerpiece ===== */
+  .hero .chart-surface { height: clamp(320px, 46vw, 520px); padding: 1rem; }
+
   .bias-controls { margin: 0.85rem 0 0; padding-left: 1.15rem; }
   .bias-controls li { font-size: 0.88rem; margin-bottom: 0.5rem; color: var(--fg); }
   .bias-controls li:last-child { margin-bottom: 0; }
 
-  .finding {
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--amber);
-    border-radius: 4px;
-    padding: 0.9rem 1.1rem;
-    background: var(--card-bg);
-  }
-  .finding p { margin: 0; font-size: 0.95rem; }
-
   .scale-note { color: var(--muted); font-size: 0.82rem; margin-bottom: 1rem; }
-  .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem; }
+  .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem; }
+  @media (max-width: 640px) { .charts-grid { grid-template-columns: 1fr; } }
   .chart-block h3 { font-size: 0.85rem; font-weight: 600; margin: 0 0 0.5rem; color: var(--fg); }
-  .chart-wrap {
-    position: relative;
-    height: 230px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    background: var(--card-bg);
-    padding: 0.7rem;
-  }
+  .chart-block .chart-surface { height: clamp(260px, 30vw, 320px); }
 
-  .ddbars { display: flex; flex-direction: column; gap: 0.55rem; margin-bottom: 1rem; }
+  .ddbars { display: flex; flex-direction: column; gap: 0.55rem; margin-bottom: 0.75rem; }
   .ddbar-row { display: flex; align-items: center; gap: 0.7rem; border-radius: 4px; }
   .ddbar-row.is-index { background: var(--index-tint); padding: 0.25rem 0.5rem; margin: -0.25rem -0.5rem; }
   .ddbar-label { width: 7.5rem; font-size: 0.85rem; font-weight: 600; flex-shrink: 0; }
   .ddbar-track { flex: 1; height: 1.1rem; background: var(--bg); border: 1px solid var(--border); border-radius: 3px; overflow: hidden; }
-  .ddbar-fill { height: 100%; }
-  .ddbar-val { width: 4.2rem; text-align: right; font-family: var(--mono); font-size: 0.85rem; flex-shrink: 0; }
-  .ddbar-legend { font-size: 0.76rem; color: var(--muted); margin: 0.4rem 0 1rem; }
+  .ddbar-fill { height: 100%; width: 0; background: var(--red); transition: width 0.7s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  .ddbar-val { width: 4.2rem; text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 0.85rem; flex-shrink: 0; }
+  .ddbar-legend { font-size: 0.76rem; color: var(--muted); margin: 0.4rem 0 0.5rem; }
   .ddbar-legend .swatch { display: inline-block; width: 0.6rem; height: 0.6rem; border-radius: 2px; background: var(--index-tint); margin-right: 0.35rem; vertical-align: middle; border: 1px solid var(--border); }
-
-  .callout {
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--red);
-    border-radius: 4px;
-    padding: 0.85rem 1.1rem;
-    margin: 1rem 0;
-    background: var(--card-bg);
-  }
-  .callout p { margin: 0; font-size: 0.9rem; }
-  .callout p + p { margin-top: 0.6rem; }
-  .callout.amber { border-left-color: var(--amber); }
+  .dd-caption { font-style: italic; color: var(--muted); font-size: 0.82rem; margin: 0.5rem 0 0; }
 
   .sources-list { font-size: 0.8rem; color: var(--muted); padding-left: 1.15rem; margin: 0.75rem 0 0; }
   .sources-list li { margin-bottom: 0.4rem; }
   .sources-list li:last-child { margin-bottom: 0; }
 
-  .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 6px; }
-  table { border-collapse: collapse; width: 100%; min-width: 480px; background: var(--card-bg); }
-  th, td { text-align: left; padding: 0.55rem 0.8rem; border-bottom: 1px solid var(--border); font-size: 0.85rem; vertical-align: top; }
-  th { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted); font-weight: 600; background: var(--bg); }
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 10px;
+    background: rgba(10, 12, 18, 0.55);
+  }
+  table { border-collapse: collapse; width: 100%; min-width: 480px; background: transparent; }
+  th, td { text-align: left; padding: 0.55rem 0.8rem; border-bottom: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.85rem; vertical-align: top; }
+  th { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted); font-weight: 600; background: rgba(255, 255, 255, 0.04); }
   tr:last-child td { border-bottom: none; }
   td.num { font-family: var(--mono); }
   tr.hl-row td { font-weight: 600; background: var(--index-tint); }
@@ -200,17 +164,34 @@
   /* Comparison table — the centerpiece */
   .table-wrap.cmp-wrap table { min-width: 720px; }
   .cmp-table td.num, .cmp-table th.num { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; }
-  .cmp-table thead th[data-key] { cursor: pointer; user-select: none; white-space: nowrap; }
-  .cmp-table thead th[data-key]:hover { color: var(--fg); }
+  .cmp-table thead th[data-key] { cursor: pointer; user-select: none; white-space: nowrap; transition: background-color 0.15s ease; }
+  .cmp-table thead th[data-key]:hover { color: var(--fg); background-color: rgba(255, 255, 255, 0.05); }
   .cmp-table thead th.sorted { color: var(--fg); }
   .cmp-table .sort-caret { display: inline-block; margin-left: 0.3rem; font-size: 0.6rem; opacity: 0.55; }
   .cmp-table thead th.sorted .sort-caret { opacity: 1; }
   .cmp-table td:first-child { vertical-align: middle; font-weight: 600; white-space: nowrap; }
   .kind-dot { display: inline-block; width: 0.55rem; height: 0.55rem; border-radius: 50%; margin-right: 0.5rem; vertical-align: middle; }
   tr.tbl-benchmark td { background: var(--index-tint); }
+  .ret-cell { font-size: clamp(1.05rem, 2vw, 1.35rem); font-weight: 600; }
+  .ret-gain { color: var(--green); }
+  .ret-loss { color: var(--red); }
 
-  /* Collapsible detail sections */
-  details.xdetails { margin-top: 1.25rem; border: 1px solid var(--border); border-radius: 6px; background: var(--card-bg); }
+  /* Collapsible detail sections — lightweight by default (used bare when
+     nested inside another glass card); add class="glass" for top-level
+     panels to get the full glass chrome via the override block below. */
+  details.xdetails {
+    margin-top: clamp(1.5rem, 4vw, 2.75rem);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.02);
+  }
+  details.xdetails.glass {
+    background: rgba(255, 255, 255, 0.045);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border-color: rgba(255, 255, 255, 0.10); border-top-color: rgba(255, 255, 255, 0.20);
+    border-radius: 16px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 12px 34px -20px rgba(0, 0, 0, 0.75);
+  }
   details.xdetails summary {
     cursor: pointer;
     padding: 0.75rem 1.1rem;
@@ -219,16 +200,26 @@
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--fg);
+    transition: background-color 0.15s ease;
   }
+  details.xdetails summary:hover { background: rgba(255, 255, 255, 0.04); }
   details.xdetails .xdetails-body { padding: 0.2rem 1.1rem 1.1rem; border-top: 1px solid var(--border); padding-top: 0.9rem; }
   details.xdetails .xdetails-body > *:first-child { margin-top: 0; }
+  details.xdetails.chip summary { text-transform: none; font-size: 0.92rem; letter-spacing: 0; }
 
-  details.brief-flips { margin-top: 1.25rem; border: 1px solid var(--border); border-radius: 6px; padding: 0.2rem 0; background: var(--card-bg); }
-  details.brief-flips summary { cursor: pointer; padding: 0.65rem 1rem; font-weight: 600; font-size: 0.88rem; }
-  details.brief-flips .table-wrap { margin: 0 1rem 1rem; border-top: 1px solid var(--border); border-radius: 0 0 6px 6px; }
+  details.brief-flips {
+    margin-top: 1.25rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 0.2rem 0;
+    background: rgba(255, 255, 255, 0.02);
+  }
+  details.brief-flips summary { cursor: pointer; padding: 0.65rem 1rem; font-weight: 600; font-size: 0.88rem; transition: background-color 0.15s ease; }
+  details.brief-flips summary:hover { background: rgba(255, 255, 255, 0.04); }
+  details.brief-flips .table-wrap { margin: 0 1rem 1rem; border-radius: 0 0 6px 6px; }
   .modeling-note { color: var(--muted); font-size: 0.85rem; margin-top: 1rem; border-left: 3px solid var(--border); padding-left: 0.8rem; }
 
-  footer.verify { border-top: 1px solid var(--border); padding-top: 1.5rem; margin-top: 3rem; }
+  footer.verify { margin-top: clamp(1.5rem, 4vw, 2.75rem); }
   footer.verify h2 { font-size: 0.9rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.03em; }
   .vcheck-pass { color: var(--green); font-weight: 600; }
   .vcheck-fail { color: var(--red); font-weight: 600; }
@@ -237,7 +228,20 @@
   .verify-line { font-size: 0.9rem; font-weight: 600; }
   .verify-line.vcheck-pass, .verify-line.vcheck-fail { font-weight: 600; }
 
-  .credit { color: var(--muted); font-size: 0.78rem; margin-top: 2.5rem; }
+  .credit { color: var(--muted); font-size: 0.78rem; margin-top: 1.5rem; }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .glass, details.xdetails.glass { background: #1c2029; backdrop-filter: none; -webkit-backdrop-filter: none; }
+    .chart-surface { background: #12141a; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+  @media (max-width: 480px) {
+    .wrap { padding: 1.5rem 0.85rem 3rem; }
+    .hero .chart-surface { height: 300px; padding: 0.6rem; }
+    .controls { gap: 0.85rem; }
+  }
 </style>
 </head>
 <body>
@@ -245,24 +249,11 @@
 
   <header>
     <h1>Buy the Index vs. Buy the Biggest Company</h1>
-    <p class="sub">A 2020–2026 backtest of nine strategies — the S&amp;P 500 and its index-fund twin, an active fund chosen by a hindsight-free rule, buying the 2020 market-cap leader (static or chased), a market-cap control, and an equal-weight Top 5 / Magnificent 7 held static or rebalanced. Compared pre-tax, post-tax, and after fees.</p>
-
-    <div class="disclaimer-block">
-      <p class="disclaimer-strip"><strong>Total return, net of fees.</strong> Not predictive — one realized path, not a forecast. <span class="nfa">Not financial advice.</span></p>
-      <details class="xdetails" style="margin-top:0;">
-        <summary>ASSUMPTIONS &amp; METHODOLOGY</summary>
-        <div class="xdetails-body">
-          <p><strong>Data:</strong> Yahoo Finance daily closes. Returns are TOTAL RETURN (dividends reinvested, split-adjusted). A price-return toggle is provided.</p>
-          <p><strong>Funds:</strong> Fund values are NAV <strong>net of expense ratio</strong> — the fee is already embedded in the price series. Each fund row's "fees paid" makes that embedded cost explicit: <span class="mono">final × ((1+ER)^years − 1)</span>. Mutual funds' annual capital-gains <em>distribution</em> taxes are NOT modeled (a simplification that would make active funds look slightly worse than shown here). Dividend tax is not separately modeled for any strategy.</p>
-          <p>Markets were closed 2026-08-08/09 (weekend); the final valuation uses the last close, Fri 2026-08-07.</p>
-          <p><strong>Tax assumptions:</strong> Assumes a single federal filer. Long-term (&gt;1yr) 15%, short-term 24% (adjustable). State taxes ignored. Capital-loss offsetting across strategies/segments is not modeled. Mag 7 annual-rebalance gains are treated long-term (~368-day holds between rebalances); the terminal sale is treated long-term on an average-cost basis — a stated simplification.</p>
-          <p><strong>No fabrication:</strong> every fund ticker, expense ratio, and constituent on this page is verified against a cited source (see below).</p>
-        </div>
-      </details>
-    </div>
+    <p class="sub">$100,000 across nine strategies · Jan 2020 → Aug 2026 · total return.</p>
+    <p class="disclaimer-strip"><strong>Total return, net of fees</strong> · not predictive · <span class="nfa">not financial advice.</span></p>
   </header>
 
-  <section class="controls" id="controls">
+  <section class="controls glass" id="controls">
     <div class="field">
       <label for="inpCapital">Starting capital</label>
       <input type="number" id="inpCapital" value="100000" min="1" step="1000">
@@ -293,17 +284,14 @@
     </div>
   </section>
 
-  <section class="selection-bias" id="selectionBias">
-    <div class="eyebrow">Selection bias — read this first</div>
-    <p>Every strategy on this page except the index (and the index fund) was chosen knowing how it turned out. Apple was the best mega-cap of 2020 — unknowable then. The 'Magnificent 7' earned that name <em>because</em> those seven won. Picking 'the top fund since 2020' picks it <em>because</em> it outperformed. The controls below exist to strip out that hindsight.</p>
-    <ul class="bias-controls">
-      <li>An active fund chosen by <strong>a rule applied as of Jan 2020</strong> — largest actively-managed US equity fund by total net assets = <strong>AGTHX</strong> (American Funds Growth Fund of America, ~$179B; net ER 0.59%) — <strong>not</strong> the best performer.</li>
-      <li>The <strong>median</strong> large-cap active fund, via SPIVA (see the explainer below) — the honest population answer, not one cherry-picked winner.</li>
-      <li><strong>MSFT control</strong> = the largest company in 2020 that was <em>not</em> Apple (same rule, different draw).</li>
-    </ul>
+  <section class="hero glass">
+    <h2 class="section-eyebrow">Growth of $100,000</h2>
+    <div class="chart-surface">
+      <canvas id="heroChart"></canvas>
+    </div>
   </section>
 
-  <section class="cmp-section">
+  <section class="cmp-section glass">
     <h2 class="section-eyebrow">Strategy comparison</h2>
     <p class="sub" style="max-width:none;">Sorted by total return by default — click any column header to re-sort.</p>
     <div class="table-wrap cmp-wrap">
@@ -325,39 +313,11 @@
     </div>
   </section>
 
-  <section class="finding">
-    <p><strong>Finding.</strong> Rebalancing into the biggest company (B2) <em>underperformed</em> simply buying the 2020 leader and never selling (B1) — even before tax. Chasing leadership after the moves had happened, plus taxes realized along the way, cost it. The static bet won because Apple stayed strong and deferred all tax to the end.</p>
-  </section>
-
-  <section class="index-vs-active">
-    <h2 class="section-eyebrow">Index vs. index fund vs. active management</h2>
-    <div class="callout">
-      <p>An S&amp;P 500 index <em>mutual fund</em> (VFIAX) holds the same 500 companies as the SPY <em>ETF</em> — the only real difference is the expense ratio (VFIAX 0.04% vs SPY 0.0945%), which is why VFIAX edged SPY by a hair. That is not a new strategy. The genuinely different case is an <strong>actively managed</strong> fund (AGTHX), where a manager picks the holdings — and here it <em>lagged</em> the index net of its 0.59% fee, paying $10,319 in fees (15× VFIAX's $692) to do so. Per S&amp;P's SPIVA U.S. Scorecard (Year-End 2024), <strong>76.26% of large-cap active funds underperformed the S&amp;P 500 over the five years</strong>. AGTHX is one fund; SPIVA is the honest median answer. Cherry-picking a known winner (Fidelity Contrafund, +201.5%) would flatter active management — which is exactly the selection error this page is about.</p>
-    </div>
-    <ul class="sources-list">
-      <li>SPIVA U.S. Scorecard Year-End 2024 — <a href="https://www.spglobal.com/spdji/en/documents/spiva/spiva-us-year-end-2024.pdf" target="_blank" rel="noopener noreferrer">S&amp;P Dow Jones Indices (PDF)</a></li>
-      <li>AGTHX (American Funds Growth Fund of America) — <a href="https://www.capitalgroup.com/individual/investments/mutual-funds/details/gfa-a" target="_blank" rel="noopener noreferrer">Capital Group</a> (net ER 0.59%, ~$179B net assets)</li>
-      <li>VFIAX (Vanguard 500 Index Admiral) ER 0.04% — Vanguard. SPY ER 0.0945% — State Street SPDR. FCNTX (Fidelity Contrafund) ER 0.74% — Fidelity ("largest solely-managed active equity fund").</li>
-      <li>Magnificent 7 = Apple, Microsoft, Alphabet, Amazon, Nvidia, Meta, Tesla (term popularized 2023).</li>
-    </ul>
-  </section>
-
-  <section class="charts">
-    <h2 class="section-eyebrow">Portfolio value over time</h2>
-    <p class="scale-note">Each chart is scaled to its own range — read the table for magnitudes, the charts for shape and volatility.</p>
-    <div class="charts-grid" id="chartsGrid"></div>
-  </section>
-
-  <section class="drawdown">
-    <h2 class="section-eyebrow">Max drawdown comparison</h2>
+  <section class="drawdown glass">
+    <h2 class="section-eyebrow section-eyebrow-sm">Max drawdown</h2>
     <div class="ddbars" id="ddBars"></div>
-    <div class="ddbar-legend"><span class="swatch"></span>Index strategies (SPY, VFIAX, AGTHX) highlighted for reference.</div>
-    <div class="callout">
-      <p>The return figures hide the volatility you'd have sat through. Mag 7's −58% and the single stocks' −33% to −37% are the risk behind the headline returns. Rebalancing the Mag 7 cut the drawdown to −50% — but cost return and tax to do it.</p>
-    </div>
-    <div class="callout amber">
-      <p><strong>Survivorship callout.</strong> Had the 2020 "largest company" instead been a volatile winner like Nvidia, a static hold would have returned +3,655% — but survived a -66% drawdown in 2022. Apple's max drawdown (-33.4%) landed close to the market's (-33.7%) largely by chance; the MSFT control saw a deeper -37.1%. Deeper single-stock risk is real — it simply didn't dominate the picks modeled here.</p>
-    </div>
+    <div class="ddbar-legend"><span class="swatch"></span>Index strategies (SPY, VFIAX, AGTHX) highlighted; bars ranked to match the table above (return, high to low).</div>
+    <p class="dd-caption">Survivorship note: had the 2020 pick instead been a volatile winner like Nvidia, a static hold would have returned +3,655% — but survived a −66% drawdown in 2022.</p>
     <details class="xdetails">
       <summary>SINGLE-STOCK DRAWDOWN REFERENCE TABLE</summary>
       <div class="xdetails-body">
@@ -372,8 +332,52 @@
     </details>
   </section>
 
+  <details class="xdetails glass toggle-charts">
+    <summary>Show each strategy ▸</summary>
+    <div class="xdetails-body">
+      <p class="scale-note">Each chart is scaled to its own range — read the table for magnitudes, the charts for shape and volatility.</p>
+      <div class="charts-grid" id="chartsGrid"></div>
+    </div>
+  </details>
+
+  <details class="xdetails glass chip" id="selectionBias">
+    <summary>Why these nine? ▸</summary>
+    <div class="xdetails-body">
+      <p>Every strategy on this page except the index (and the index fund) was chosen knowing how it turned out. Apple was the best mega-cap of 2020 — unknowable then. The 'Magnificent 7' earned that name <em>because</em> those seven won. Picking 'the top fund since 2020' picks it <em>because</em> it outperformed. The controls below exist to strip out that hindsight.</p>
+      <ul class="bias-controls">
+        <li>An active fund chosen by <strong>a rule applied as of Jan 2020</strong> — largest actively-managed US equity fund by total net assets = <strong>AGTHX</strong> (American Funds Growth Fund of America, ~$179B; net ER 0.59%) — <strong>not</strong> the best performer.</li>
+        <li>The <strong>median</strong> large-cap active fund, via SPIVA (see the explainer below) — the honest population answer, not one cherry-picked winner.</li>
+        <li><strong>MSFT control</strong> = the largest company in 2020 that was <em>not</em> Apple (same rule, different draw).</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="xdetails glass chip">
+    <summary>Index vs. active, explained ▸</summary>
+    <div class="xdetails-body">
+      <p>An S&amp;P 500 index <em>mutual fund</em> (VFIAX) holds the same 500 companies as the SPY <em>ETF</em> — the only real difference is the expense ratio (VFIAX 0.04% vs SPY 0.0945%), which is why VFIAX edged SPY by a hair. That is not a new strategy. The genuinely different case is an <strong>actively managed</strong> fund (AGTHX), where a manager picks the holdings — and here it <em>lagged</em> the index net of its 0.59% fee, paying $10,319 in fees (15× VFIAX's $692) to do so. Per S&amp;P's SPIVA U.S. Scorecard (Year-End 2024), <strong>76.26% of large-cap active funds underperformed the S&amp;P 500 over the five years</strong>. AGTHX is one fund; SPIVA is the honest median answer. Cherry-picking a known winner (Fidelity Contrafund, +201.5%) would flatter active management — which is exactly the selection error this page is about.</p>
+      <ul class="sources-list">
+        <li>SPIVA U.S. Scorecard Year-End 2024 — <a href="https://www.spglobal.com/spdji/en/documents/spiva/spiva-us-year-end-2024.pdf" target="_blank" rel="noopener noreferrer">S&amp;P Dow Jones Indices (PDF)</a></li>
+        <li>AGTHX (American Funds Growth Fund of America) — <a href="https://www.capitalgroup.com/individual/investments/mutual-funds/details/gfa-a" target="_blank" rel="noopener noreferrer">Capital Group</a> (net ER 0.59%, ~$179B net assets)</li>
+        <li>VFIAX (Vanguard 500 Index Admiral) ER 0.04% — Vanguard. SPY ER 0.0945% — State Street SPDR. FCNTX (Fidelity Contrafund) ER 0.74% — Fidelity ("largest solely-managed active equity fund").</li>
+        <li>Magnificent 7 = Apple, Microsoft, Alphabet, Amazon, Nvidia, Meta, Tesla (term popularized 2023).</li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="xdetails glass">
+    <summary>ASSUMPTIONS &amp; METHODOLOGY</summary>
+    <div class="xdetails-body">
+      <p><strong>Data:</strong> Yahoo Finance daily closes. Returns are TOTAL RETURN (dividends reinvested, split-adjusted). A price-return toggle is provided.</p>
+      <p><strong>Funds:</strong> Fund values are NAV <strong>net of expense ratio</strong> — the fee is already embedded in the price series. Each fund row's "fees paid" makes that embedded cost explicit: <span class="mono">final × ((1+ER)^years − 1)</span>. Mutual funds' annual capital-gains <em>distribution</em> taxes are NOT modeled (a simplification that would make active funds look slightly worse than shown here). Dividend tax is not separately modeled for any strategy.</p>
+      <p>Markets were closed 2026-08-08/09 (weekend); the final valuation uses the last close, Fri 2026-08-07.</p>
+      <p><strong>Tax assumptions:</strong> Assumes a single federal filer. Long-term (&gt;1yr) 15%, short-term 24% (adjustable). State taxes ignored. Capital-loss offsetting across strategies/segments is not modeled. Mag 7 annual-rebalance gains are treated long-term (~368-day holds between rebalances); the terminal sale is treated long-term on an average-cost basis — a stated simplification.</p>
+      <p><strong>No fabrication:</strong> every fund ticker, expense ratio, and constituent on this page is verified against a cited source (see below).</p>
+    </div>
+  </details>
+
   <section class="mag7detail">
-    <details class="xdetails">
+    <details class="xdetails glass">
       <summary>MAG 7 PER-STOCK DETAIL</summary>
       <div class="xdetails-body">
         <p>The equal-weight bet became a de-facto NVDA bet through drift alone.</p>
@@ -386,7 +390,7 @@
         <p class="modeling-note" id="mag7WeightNote"></p>
       </div>
     </details>
-    <details class="xdetails">
+    <details class="xdetails glass">
       <summary>REBALANCE TAX LOG</summary>
       <div class="xdetails-body">
         <p class="sub" style="max-width:none;">Static equal-weight is rebalanced to exactly 1/7 on the first trading day of each year. Overweight positions are sold (gain realized vs. average cost basis, taxed long-term), and the post-tax cash buys underweight positions pro-rata to their shortfall. The terminal sale at the end of the period dominates the total tax bill.</p>
@@ -401,7 +405,7 @@
   </section>
 
   <section class="sequence">
-    <details class="xdetails">
+    <details class="xdetails glass">
       <summary>LEADERSHIP-SEQUENCE TIMELINE</summary>
       <div class="xdetails-body">
         <p class="sub" style="max-width:none;">Each row is a date the company BECAME #1 by market cap (close-of-day, sustained). B2 sells the prior holding and buys the new one on the next trading day if the transition date itself isn't one.</p>
@@ -425,7 +429,7 @@
     </details>
   </section>
 
-  <footer class="verify" id="verifyFooter">
+  <footer class="verify glass" id="verifyFooter">
     <h2>Model verification</h2>
     <p class="verify-line" id="verifySummary">✓ All figures verified against an independent Python model.</p>
     <details class="xdetails">
@@ -443,6 +447,18 @@
     </details>
     <p class="credit">Self-contained HTML artifact. Chart.js loaded from CDN; all price, sequence, and tax-log data is embedded inline — no other network calls.</p>
   </footer>
+
+  <details class="xdetails glass">
+    <summary>CITATIONS</summary>
+    <div class="xdetails-body">
+      <ul class="sources-list">
+        <li>SPIVA U.S. Scorecard Year-End 2024 — <a href="https://www.spglobal.com/spdji/en/documents/spiva/spiva-us-year-end-2024.pdf" target="_blank" rel="noopener noreferrer">S&amp;P Dow Jones Indices (PDF)</a></li>
+        <li>AGTHX (American Funds Growth Fund of America) — <a href="https://www.capitalgroup.com/individual/investments/mutual-funds/details/gfa-a" target="_blank" rel="noopener noreferrer">Capital Group</a> (net ER 0.59%, ~$179B net assets)</li>
+        <li>VFIAX (Vanguard 500 Index Admiral) ER 0.04% — Vanguard. SPY ER 0.0945% — State Street SPDR. FCNTX (Fidelity Contrafund) ER 0.74% — Fidelity ("largest solely-managed active equity fund").</li>
+        <li>Magnificent 7 = Apple, Microsoft, Alphabet, Amazon, Nvidia, Meta, Tesla (term popularized 2023).</li>
+      </ul>
+    </div>
+  </details>
 
 </div>
 
@@ -773,6 +789,14 @@ Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Hel
 Chart.defaults.color = getCssVar('--muted');
 Chart.defaults.borderColor = getCssVar('--border');
 
+// Numerals (ticks/tooltips) render in the same mono stack as --mono. Canvas
+// text can't consume CSS custom properties, so the literal stack is mirrored
+// here for Chart.js font configs only — purely cosmetic, no data/logic impact.
+const MONO_FONT = 'ui-monospace, "SF Mono", "Menlo", "Consolas", monospace';
+function prefersReducedMotion() {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
 let CURRENT_START_CAPITAL = 100000;
 const chartInstances = {};
 const ALL_CHART_IDS = ['chartMag7', 'chartB1B2', 'chartTop5', 'chartMSFT', 'chartSPY', 'chartVFIAX', 'chartAGTHX'];
@@ -785,7 +809,8 @@ function buildChart(canvasId, datasets, labels) {
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      animation: { duration: 150 },
+      resizeDelay: 200,
+      animation: prefersReducedMotion() ? { duration: 0 } : { duration: 250 },
       interaction: { mode: 'index', intersect: false },
       elements: {
         line: { borderWidth: 1.4, tension: 0, fill: false },
@@ -803,6 +828,7 @@ function buildChart(canvasId, datasets, labels) {
           ticks: {
             color: getCssVar('--muted'),
             maxTicksLimit: 6,
+            font: { family: MONO_FONT },
             callback: (v) => '$' + Number(v).toLocaleString('en-US')
           },
           grid: { color: getCssVar('--border') },
@@ -818,6 +844,102 @@ function buildChart(canvasId, datasets, labels) {
           backgroundColor: getCssVar('--card-bg'),
           titleColor: getCssVar('--fg'),
           bodyColor: getCssVar('--fg'),
+          bodyFont: { family: MONO_FONT },
+          borderColor: getCssVar('--border'),
+          borderWidth: 1,
+          padding: 10,
+          callbacks: {
+            title: (items) => items[0] ? items[0].label : '',
+            label: (item) => {
+              const v = item.parsed.y;
+              const pct = v / CURRENT_START_CAPITAL - 1;
+              return ' ' + item.dataset.label + ':  ' + fmtUSD(v) + '   (' + fmtPct(pct) + ' since start)';
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+function buildHeroChart(result) {
+  // Downsample to ~weekly points: 9 overlaid lines × ~1658 daily points is
+  // needlessly heavy to draw/animate (and rough on phones). Weekly is visually
+  // identical; we always keep the last index so the final value stays exact.
+  const fullLabels = DATES.slice(result.s0idx);
+  const step = Math.max(1, Math.ceil(fullLabels.length / 340));
+  const idx = [];
+  for (let i = 0; i < fullLabels.length; i += step) idx.push(i);
+  if (idx[idx.length - 1] !== fullLabels.length - 1) idx.push(fullLabels.length - 1);
+  const labels = idx.map(i => fullLabels[i]);
+  const specs = [
+    { key: 'M7S', label: 'Mag 7 — static', color: getCssVar('--purple') },
+    { key: 'M7R', label: 'Mag 7 — annual rebalance', color: getCssVar('--magenta') },
+    { key: 'B1', label: 'Static — ' + result.b1t, color: getCssVar('--green') },
+    { key: 'B2', label: 'Rebalance into #1', color: getCssVar('--amber') },
+    { key: 'TOP5S', label: 'Top 5 (2020)', color: getCssVar('--gold') },
+    { key: 'MSFTc', label: 'MSFT control', color: getCssVar('--brown') },
+    { key: 'A', label: 'S&P 500 (SPY)', color: getCssVar('--blue') },
+    { key: 'VFIAX', label: 'VFIAX', color: getCssVar('--teal') },
+    { key: 'AGTHX', label: 'AGTHX', color: getCssVar('--taupe') }
+  ];
+  // Sorted so the top-return strategy (highest final value) is first —
+  // matches the ranked table's default return-desc order.
+  const sorted = specs.slice().sort((a, b) => result[b.key].pre - result[a.key].pre);
+
+  const datasets = sorted.map(s => ({
+    label: s.label,
+    data: idx.map(i => result[s.key].path[i]),
+    borderColor: s.color,
+    backgroundColor: s.color + '22',
+    borderWidth: 2,
+    pointRadius: 0,
+    tension: 0.05,
+    fill: false
+  }));
+
+  const existing = Chart.getChart('heroChart');
+  if (existing) existing.destroy();
+
+  const ctx = document.getElementById('heroChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: { labels, datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      resizeDelay: 200,
+      animation: prefersReducedMotion() ? { duration: 0 } : { duration: 900, easing: 'easeOutQuart' },
+      interaction: { mode: 'index', intersect: false },
+      scales: {
+        x: {
+          ticks: { maxTicksLimit: 8, autoSkip: true, color: getCssVar('--muted') },
+          grid: { display: false },
+          border: { color: getCssVar('--border') }
+        },
+        y: {
+          beginAtZero: true,
+          ticks: {
+            color: getCssVar('--muted'),
+            maxTicksLimit: 7,
+            font: { family: MONO_FONT },
+            callback: (v) => '$' + Number(v).toLocaleString('en-US')
+          },
+          grid: { color: getCssVar('--border') },
+          border: { color: getCssVar('--border') }
+        }
+      },
+      plugins: {
+        legend: {
+          display: true,
+          position: 'bottom',
+          labels: { color: getCssVar('--fg'), usePointStyle: true, boxWidth: 8, boxHeight: 8, font: { size: 11 } }
+        },
+        tooltip: {
+          backgroundColor: getCssVar('--card-bg'),
+          titleColor: getCssVar('--fg'),
+          bodyColor: getCssVar('--fg'),
+          bodyFont: { family: MONO_FONT },
           borderColor: getCssVar('--border'),
           borderWidth: 1,
           padding: 10,
@@ -907,7 +1029,7 @@ function renderCharts(result) {
   grid.innerHTML = specs.map(spec => (
     '<div class="chart-block">' +
       '<h3>' + spec.title + '</h3>' +
-      '<div class="chart-wrap"><canvas id="' + spec.id + '"></canvas></div>' +
+      '<div class="chart-surface"><canvas id="' + spec.id + '"></canvas></div>' +
     '</div>'
   )).join('');
 
@@ -958,7 +1080,7 @@ function renderTableBody() {
         '<span class="tag-approx">' + r.kind + '</span></td>' +
       '<td class="num">' + fmtUSD(r.pre) + '</td>' +
       '<td class="num">' + fmtUSD(r.post) + '</td>' +
-      '<td class="num">' + fmtPct(r.ret) + '</td>' +
+      '<td class="num ret-cell ' + (r.ret >= 0 ? 'ret-gain' : 'ret-loss') + '">' + fmtPct(r.ret) + '</td>' +
       '<td class="num">' + fmtPct(r.cagr) + '</td>' +
       '<td class="num">' + fmtPctPlain(r.dd) + '</td>' +
       '<td class="num">' + fmtUSD(r.tax) + '</td>' +
@@ -1007,18 +1129,21 @@ function renderTable(result) {
    RENDER — drawdown bars + reference table
    ============================================================ */
 function renderDrawdownBars(result) {
+  // Ranked to MATCH the ranked table's default order (return, high to low) —
+  // not sorted by drawdown depth. Fills are uniformly --red (these are all
+  // losses-from-peak); the per-strategy color coding lives in the table/hero.
   const rows = [
-    { label: 'A · SPY', dd: result.A.dd, color: 'var(--blue)', idx: true },
-    { label: 'VFIAX', dd: result.VFIAX.dd, color: 'var(--teal)', idx: true },
-    { label: 'AGTHX', dd: result.AGTHX.dd, color: 'var(--taupe)', idx: true },
-    { label: 'B1 · ' + result.b1t, dd: result.B1.dd, color: 'var(--green)' },
-    { label: 'B2 · rebal.', dd: result.B2.dd, color: 'var(--amber)' },
-    { label: 'MSFT ctrl', dd: result.MSFTc.dd, color: 'var(--brown)' },
-    { label: 'Top5 · 2020', dd: result.TOP5S.dd, color: 'var(--gold)' },
-    { label: 'Mag7 static', dd: result.M7S.dd, color: 'var(--purple)' },
-    { label: 'Mag7 rebal.', dd: result.M7R.dd, color: 'var(--magenta)' }
+    { label: 'A · SPY', dd: result.A.dd, ret: result.A.ret, idx: true },
+    { label: 'VFIAX', dd: result.VFIAX.dd, ret: result.VFIAX.ret, idx: true },
+    { label: 'AGTHX', dd: result.AGTHX.dd, ret: result.AGTHX.ret, idx: true },
+    { label: 'B1 · ' + result.b1t, dd: result.B1.dd, ret: result.B1.ret },
+    { label: 'B2 · rebal.', dd: result.B2.dd, ret: result.B2.ret },
+    { label: 'MSFT ctrl', dd: result.MSFTc.dd, ret: result.MSFTc.ret },
+    { label: 'Top5 · 2020', dd: result.TOP5S.dd, ret: result.TOP5S.ret },
+    { label: 'Mag7 static', dd: result.M7S.dd, ret: result.M7S.ret },
+    { label: 'Mag7 rebal.', dd: result.M7R.dd, ret: result.M7R.ret }
   ];
-  rows.sort((a, b) => a.dd - b.dd);
+  rows.sort((a, b) => b.ret - a.ret);
   const maxAbs = Math.max(...rows.map(r => Math.abs(r.dd)));
   const el = document.getElementById('ddBars');
   el.innerHTML = rows.map(r => {
@@ -1026,11 +1151,23 @@ function renderDrawdownBars(result) {
     return (
       '<div class="ddbar-row' + (r.idx ? ' is-index' : '') + '">' +
         '<div class="ddbar-label">' + r.label + '</div>' +
-        '<div class="ddbar-track"><div class="ddbar-fill" style="width:' + pct.toFixed(1) + '%;background:' + r.color + '"></div></div>' +
+        '<div class="ddbar-track"><div class="ddbar-fill" data-target="' + pct.toFixed(1) + '" style="width:0%"></div></div>' +
         '<div class="ddbar-val">' + fmtPctPlain(r.dd) + '</div>' +
       '</div>'
     );
   }).join('');
+  // Animate width 0 -> target on (re)render. Double rAF so the browser
+  // paints the width:0 state first, letting the CSS transition catch the
+  // change to the target width (a single rAF can still coalesce with the
+  // paint that just set width:0). Skipped entirely under reduced-motion —
+  // the CSS transition itself is neutralized there too (belt & suspenders).
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      document.querySelectorAll('#ddBars .ddbar-fill').forEach(fillEl => {
+        fillEl.style.width = fillEl.dataset.target + '%';
+      });
+    });
+  });
 }
 
 function renderRefTable() {
@@ -1212,6 +1349,7 @@ function readInputs() {
   return { startCapital, startDateRaw, ltRate, stRate, basisKey };
 }
 
+let SMALL_CHARTS_RESULT = null, smallChartsDirty = true;
 function recompute() {
   const inputs = readInputs();
   const result = computeAll(inputs);
@@ -1222,7 +1360,14 @@ function recompute() {
     : 'first trading day ✓';
 
   renderTable(result);
-  renderCharts(result);
+  buildHeroChart(result);
+  // Lazy-render the per-strategy small-multiples: only build them while the
+  // "Show each strategy" panel is OPEN. Building 7 responsive Chart.js instances
+  // inside a display:none <details> spins up ResizeObservers on 0-size elements
+  // and pegs the main thread. Render on demand instead (see the toggle listener).
+  SMALL_CHARTS_RESULT = result;
+  const _tc = document.querySelector('.toggle-charts');
+  if (_tc && _tc.open) { renderCharts(result); smallChartsDirty = false; } else { smallChartsDirty = true; }
   renderDrawdownBars(result);
   renderMag7Table(result);
   renderMag7TaxTable(result);
@@ -1239,6 +1384,15 @@ function initControls() {
         recompute();
       });
     });
+  });
+  // Build the per-strategy charts the first time the panel is opened (and after
+  // any input change while it was closed), so they never render while hidden.
+  const toggleCharts = document.querySelector('.toggle-charts');
+  if (toggleCharts) toggleCharts.addEventListener('toggle', () => {
+    if (toggleCharts.open && smallChartsDirty && SMALL_CHARTS_RESULT) {
+      renderCharts(SMALL_CHARTS_RESULT);
+      smallChartsDirty = false;
+    }
   });
 }
 
